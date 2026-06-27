@@ -1,0 +1,22 @@
+[
+  {
+    "name": "github_star_repo",
+    "description": "Star a GitHub repository",
+    "webhook_path": "github-star"
+  },
+  {
+    "name": "send_discord_message",
+    "description": "Send a message to Discord",
+    "webhook_path": "discord-msg"
+  },
+  {
+    "name": "create_notion_page",
+    "description": "Create a Notion page",
+    "webhook_path": "notion-create"
+  },
+  {
+    "name": "gmail_send",
+    "description": "Send email via Gmail",
+    "webhook_path": "gmail-send"
+  }
+]

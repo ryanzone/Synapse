@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+
+# Logs
+*.log
+logs/
+
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+
+# Type Checking
+.mypy_cache/
+.pyre/
+.ruff_cache/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+
+# Docker
+docker-data/
+
+# Local Databases
+
+*.db
+*.sqlite
+*.sqlite3
+
+# Qdrant Local Storage
+qdrant_storage/
+
+# Misc
+*.tmp
+*.swp
