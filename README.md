@@ -24,7 +24,6 @@ It is designed to be modular, extensible, and self-improving over time through i
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
-- [Author](#author)
 
 ---
 
@@ -365,9 +364,3 @@ Please keep pull requests focused and include a clear description of what was ch
 This project is licensed under the [MIT License](LICENSE).
 
 ---
-
-## Author
-
-Built and maintained by **[Your Name](https://github.com/your-username)**.
-
-If you find this project useful, feel free to star the repository or open an issue with feedback.
