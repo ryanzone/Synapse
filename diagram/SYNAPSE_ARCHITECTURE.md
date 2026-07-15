@@ -70,67 +70,8 @@ graph TB
 
 ---
 
-## 2. Component Architecture
 
-```mermaid
-graph LR
-    subgraph API["api/"]
-        R["routes.py"]
-        WH["websocket_handler.py"]
-        M["middleware.py"]
-    end
-
-    subgraph CORE["core/"]
-        AC["agent_cycle.py"]
-        PL["planner.py"]
-        EX["executor.py"]
-        RE["reflection.py"]
-        CB["context_builder.py"]
-    end
-
-    subgraph TOOLS["tools/"]
-        TR["tool_registry.py"]
-        BI["builtin_tools.py"]
-        WC["workflow_client.py"]
-    end
-
-    subgraph MEMORY["memory/"]
-        MS["memory_service.py"]
-        ES["embedding_service.py"]
-        QC["qdrant_client.py"]
-    end
-
-    subgraph INFRA["infrastructure/"]
-        LC["llm_client.py"]
-        CFG["config.py"]
-        LOG["logger.py"]
-    end
-
-    R --> AC
-    WH --> AC
-    AC --> PL
-    AC --> EX
-    AC --> RE
-    AC --> CB
-    CB --> MS
-    PL --> LC
-    EX --> TR
-    RE --> LC
-    TR --> BI
-    TR --> WC
-    MS --> ES
-    MS --> QC
-    ES --> QC
-    R --> M
-    WH --> M
-    AC --> LOG
-    LC --> CFG
-    QC --> CFG
-```
-
----
-
-## 3. Autonomous Agent Workflow
+## 2. Autonomous Agent Workflow
 
 ```mermaid
 flowchart TD
@@ -158,7 +99,7 @@ flowchart TD
 
 ---
 
-## 4. Request Lifecycle
+## 3. Request Lifecycle
 
 ```mermaid
 sequenceDiagram
@@ -198,7 +139,7 @@ sequenceDiagram
 
 ---
 
-## 5. Memory Architecture
+## 4. Memory Architecture
 
 ```mermaid
 graph TB
@@ -246,7 +187,7 @@ graph TB
 
 ---
 
-## 6. Tool Execution Flow
+## 5. Tool Execution Flow
 
 ```mermaid
 flowchart TD
@@ -287,7 +228,7 @@ flowchart TD
 
 ---
 
-## 7. Deployment Architecture
+## 6. Deployment Architecture
 
 ```mermaid
 graph TB
@@ -330,165 +271,6 @@ graph TB
 
 ---
 
-## 8. Sequence Diagram — Full Agent Interaction
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant U as User
-    participant API as FastAPI
-    participant A as Agent Cycle
-    participant MEM as Memory Service
-    participant LLM as LM Studio
-    participant TOOL as Tool Executor
-    participant REF as Reflection Engine
 
-    U->>API: Submit prompt
-    API->>A: Dispatch AgentRequest
 
-    A->>MEM: Retrieve relevant memories
-    MEM-->>A: MemoryChunks[]
-
-    A->>LLM: Generate action plan (context + prompt)
-    LLM-->>A: Structured ActionPlan
-
-    loop For each action in plan
-        A->>TOOL: Execute tool call
-        TOOL-->>A: ToolResult
-    end
-
-    A->>REF: Evaluate plan vs results
-    REF->>LLM: Reflection prompt
-    LLM-->>REF: Self-critique + corrections
-
-    alt Reflection triggers retry
-        REF-->>A: Retry with corrections
-        A->>LLM: Revised plan
-        LLM-->>A: Updated ActionPlan
-    end
-
-    A->>MEM: Store experience embedding
-    MEM-->>A: ACK
-
-    A-->>API: AgentResponse
-    API-->>U: Final response
-```
-
----
-
-## 9. Project Dependency Graph
-
-```mermaid
-graph TD
-    CFG["config.py"]
-    LOG["logger.py"]
-    LC["llm_client.py"]
-    ES["embedding_service.py"]
-    QC["qdrant_client.py"]
-    MS["memory_service.py"]
-    TR["tool_registry.py"]
-    BI["builtin_tools.py"]
-    WC["workflow_client.py"]
-    CB["context_builder.py"]
-    PL["planner.py"]
-    EX["executor.py"]
-    RE["reflection.py"]
-    AC["agent_cycle.py"]
-    RT["routes.py"]
-    WH["websocket_handler.py"]
-    MW["middleware.py"]
-    MAIN["main.py"]
-
-    CFG --> LC
-    CFG --> ES
-    CFG --> QC
-    CFG --> WC
-    LOG --> AC
-    LOG --> RT
-    LC --> PL
-    LC --> RE
-    ES --> MS
-    QC --> MS
-    MS --> CB
-    TR --> BI
-    TR --> WC
-    CB --> AC
-    PL --> AC
-    EX --> AC
-    RE --> AC
-    TR --> EX
-    MW --> RT
-    MW --> WH
-    RT --> AC
-    WH --> AC
-    RT --> MAIN
-    WH --> MAIN
-    MW --> MAIN
-```
-
----
-
-## 10. Backend Package Structure
-
-```mermaid
-graph TD
-    ROOT["synapse/"]
-
-    subgraph SRC["src/"]
-        subgraph API_PKG["api/"]
-            ROUTES["routes.py"]
-            WSH["websocket_handler.py"]
-            MID["middleware.py"]
-            SCHEMAS["schemas.py"]
-        end
-
-        subgraph CORE_PKG["core/"]
-            AGENTC["agent_cycle.py"]
-            PLANR["planner.py"]
-            EXECR["executor.py"]
-            REFLR["reflection.py"]
-            CTXB["context_builder.py"]
-        end
-
-        subgraph TOOLS_PKG["tools/"]
-            TREG["tool_registry.py"]
-            BTOOLS["builtin_tools.py"]
-            WCLIENT["workflow_client.py"]
-        end
-
-        subgraph MEM_PKG["memory/"]
-            MEMSVC["memory_service.py"]
-            EMBSVC["embedding_service.py"]
-            QDCLI["qdrant_client.py"]
-            MODELS["models.py"]
-        end
-
-        subgraph INFRA_PKG["infrastructure/"]
-            LLMCLI["llm_client.py"]
-            CONFG["config.py"]
-            LOGG["logger.py"]
-        end
-
-        MAINPY["main.py"]
-    end
-
-    subgraph DEPLOY["deployment/"]
-        DC["docker-compose.yml"]
-        DF["Dockerfile"]
-        ENV[".env.example"]
-    end
-
-    subgraph TESTS["tests/"]
-        TCORE["test_core/"]
-        TMEM["test_memory/"]
-        TTOOLS["test_tools/"]
-    end
-
-    ROOT --> SRC
-    ROOT --> DEPLOY
-    ROOT --> TESTS
-```
-
----
-
-*Generated for the Synapse autonomous AI agent platform.*
